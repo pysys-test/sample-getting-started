@@ -1,5 +1,5 @@
 # PySys Sample - Getting Started
-[![PySys tests](../../workflows/PySys%20tests/badge.svg)])(../../actions)
+[![PySys tests](../../workflows/PySys%20tests/badge.svg)](../../actions)
 
 This project shows how to use the PySys system test framework to test a sample application (a small REST/HTTP server). 
 
