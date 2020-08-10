@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pysystest>
+  
+  <description> 
+    <title>MyServer responses: /sensorValues endpoint (+ demo of PySys assertions)</title>    
+    <purpose><![CDATA[
+		To verify that responses from MyServer are correct on the /sensorValues REST endpoint. 
+		
+		This also shows some of the different approaches to validation in PySys, using various styles of assertion. 
+	]]></purpose>
+  </description>
+
+  <!-- <skipped reason=""/> -->
+  
+  <classification>
+    <groups inherit="true">
+      <group></group>
+    </groups>
+    
+    <modes inherit="true">
+    </modes>
+  </classification>
+
+  <data>
+    <class name="PySysTest" module="run"/>
+  </data>
+  
+</pysystest>

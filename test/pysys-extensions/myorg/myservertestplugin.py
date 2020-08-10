@@ -1,0 +1,78 @@
+import sys
+import os
+import json
+import logging
+
+import pysys
+
+class MyServerTestPlugin(object):
+	"""
+	This is a sample PySys test plugin for configuring and starting MyServer instances. 
+	"""
+
+	# Class (static) variables for default plugin property values:
+
+	myServerConfigProperty = 12345
+	"""
+	Example (a contrived one!) of a plugin configuration property. 
+	
+	The value for this plugin instance can be overridden using ``<property .../>``.
+	Types such as boolean/list[str]/int/float will be automatically converted from string. 
+	"""
+
+	def setup(self, testObj):
+		self.owner = self.testObj = testObj
+		self.log = logging.getLogger('pysys.myorg.MyTestPlugin')
+
+	def createConfigFile(self, port, configfile='myserverconfig.json'):
+		"""
+		Create a configuration file for this server using the specified port. 
+		
+		:param int port: The port number. 
+		:param str configfile: The output file. 
+		:return str: The path to the created config file. 
+		"""
+		self.owner.write_text(configfile, 
+			json.dumps({
+			'port':port, 
+			'myServerConfigProperty':self.myServerConfigProperty
+			}), encoding='utf-8')
+		return os.path.join(self.owner.output, configfile)
+
+	def startServer(self, name="my_server", arguments=[], waitForServerUp=True, **kwargs):
+		"""
+		Start this server as a background process on a dynamically assigned free port, and wait for it to come up. 
+		
+		:param str name: A logical name for this server (in case a single test starts several of them). 
+			Used to define the default stdouterr and displayName
+		:param list[str] arguments: Arguments to pass to the server. 
+		:param kwargs: Additional keyword arguments are passed through to `pysys.basetest.BaseTest.startProcess()`. 
+		"""
+		# As this is a server, start in the background by default, but allow user to override by specifying background=False
+		kwargs.setdefault('background', True)
+
+		# Use allocateUniqueStdOutErr to make sure if we have multiple instances in this test they don't use the same stdout/err files
+		kwargs.setdefault('stdouterr', self.owner.allocateUniqueStdOutErr(name))
+		
+		if '--port' not in arguments and '--configfile' not in arguments:
+			serverPort = self.owner.getNextAvailableTCPPort()
+			arguments = arguments+['--port', str(serverPort)]
+			kwargs.setdefault('displayName', f'{name}<port {serverPort}>')
+		else:
+			serverPort = None
+		
+		# Could optionally call addCleanupFunction to send a graceful shutdown request to the server port, rather than 
+		# relying on hard kill PySys does by default during cleanup
+		
+		# Use startPython rather than startProcess here so we can get Python code coverage
+		process = self.owner.startPython(
+			arguments=[self.owner.project.appHome+'/my_server.py']+arguments,
+			info={'port':serverPort},
+			
+			# NB: always pass through **kwargs when defining a startProcess wrapper
+			**kwargs)
+		if waitForServerUp:
+			self.owner.waitForGrep(process.stdout, 'Started MyServer .*on port .*', errorExpr=[' (ERROR|FATAL) '], process=process)
+
+		process.info = {'port': serverPort}
+		return process
