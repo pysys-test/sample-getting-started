@@ -2,6 +2,7 @@ import sys
 import os
 import json
 import logging
+import urllib.request
 
 import pysys
 
@@ -46,6 +47,7 @@ class MyServerTestPlugin(object):
 		:param str name: A logical name for this server (in case a single test starts several of them). 
 			Used to define the default stdouterr and displayName
 		:param list[str] arguments: Arguments to pass to the server. 
+		:param bool waitForServerUp: Wait until the server is ready to handle requests (ignored if background is set to False). 
 		:param kwargs: Additional keyword arguments are passed through to `pysys.basetest.BaseTest.startProcess()`. 
 		"""
 		# As this is a server, start in the background by default, but allow user to override by specifying background=False
@@ -71,8 +73,22 @@ class MyServerTestPlugin(object):
 			
 			# NB: always pass through **kwargs when defining a startProcess wrapper
 			**kwargs)
-		if waitForServerUp:
+		if waitForServerUp and kwargs['background']:
 			self.owner.waitForGrep(process.stdout, 'Started MyServer .*on port .*', errorExpr=[' (ERROR|FATAL) '], process=process)
+		
+		# Register a cleanup function that will attempt to request a clean shutdown, since otherwise code coverage isn't written
+		if serverPort:
+			self.owner.addCleanupFunction(lambda: self.shutdownServer(process), ignoreErrors=False)
 
 		process.info = {'port': serverPort}
 		return process
+	
+	def shutdownServer(self, server, timeout=pysys.constants.TIMEOUTS['WaitForProcessStop'], **kwargs):
+		"""
+		Cleanly shutdown the specified server. 
+		
+		Raises an error if the process is not running or if the port of this server is not known. 
+		"""
+		if not server.running(): return
+		urllib.request.urlopen(f'http://localhost:{server.info["port"]}/shutdown').close()
+		server.wait(timeout, **kwargs)

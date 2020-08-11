@@ -47,13 +47,17 @@ try:
 				self.end_headers()
 				self.flush_headers()
 				sys.exit(0)
+
+			elif self.path == '/otherRequest':
+				raise Exception('Not implemented yet')
+
 			elif self.path == '/sensorValues':
 				# dynamically generate some data
 				self.send_response(200)
 				self.end_headers()
 				self.wfile.write(json.dumps({
 					'sensorId':'ABC1234',
-					'timestamp':'%s.%3d'%(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), datetime.datetime.now().microsecond/1000),
+					'timestamp':'%s.%03d'%(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), datetime.datetime.now().microsecond/1000),
 					'collectionHost':socket.gethostname(),
 					'measurements':[
 						123.4,
