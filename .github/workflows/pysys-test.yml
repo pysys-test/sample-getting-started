@@ -51,7 +51,7 @@ jobs:
         
       # If any tests fail, PySys will return an error code, so we need "if: always()" so the following steps will run
 
-      - name: Temp: Upload code coverage (Python)
+      - name: Temp Upload code coverage (Python)
         uses: codecov/codecov-action@v1
         if: always()
         with:
