@@ -53,14 +53,14 @@ jobs:
 
       - name: Upload code coverage (Python)
         uses: codecov/codecov-action@v1
-        if: always() && steps.pysys.outputs.steps.pysys.outputs.artifact_PythonCoverageDir
+        if: always() && steps.pysys.outputs.artifact_PythonCoverageDir
         with:
           file: test/__coverage_python.${{matrix.test-run-id}}/.coverage
       
       - name: Upload performance CSV artifacts
         uses: actions/upload-artifact@v2
         # Only do this if some performance results were generated
-        if: always() && steps.pysys.outputs.steps.pysys.outputs.artifact_CSVPerformanceReport
+        if: always() && steps.pysys.outputs.artifact_CSVPerformanceReport
 
         with:
           name: pysys_performance_${{matrix.test-run-id}}
