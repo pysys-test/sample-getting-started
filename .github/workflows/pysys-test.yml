@@ -47,9 +47,15 @@ jobs:
         shell: bash
         id: pysys
         run: |
-          python -m pysys run --ci --outdir=${{matrix.test-run-id}}
+          python -m pysys run -XcodeCoverage -vdebug --outdir=${{matrix.test-run-id}}
         
       # If any tests fail, PySys will return an error code, so we need "if: always()" so the following steps will run
+
+      - name: Temp: Upload code coverage (Python)
+        uses: codecov/codecov-action@v1
+        if: always()
+        with:
+          file: test/__coverage_python.${{matrix.test-run-id}}/.coverage
 
       - name: Upload code coverage (Python)
         uses: codecov/codecov-action@v1
