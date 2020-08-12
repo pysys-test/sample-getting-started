@@ -41,21 +41,24 @@ jobs:
 
           # Use older version of coverage as 5.0 requires an SQLite version that doesn't work on this macos image currently
           pip install coverage==4.5.4
-          
+
+      - name: Windows TCP configuration
+        # Set the TCP dynamic/ephemeral port range on Windows back to the normal Windows default configuration
+        # (GitHub Actions currently sets *all* ports to be dynamic which leaves none to start test servers on)
+        if: runner.os == 'Windows'
+        run: |
+          netsh int ipv4 show dynamicport tcp
+          netsh int ipv4 set dynamicportrange tcp startport=49152 numberofports=16384
+          netsh int ipv6 set dynamicportrange tcp startport=49152 numberofports=16384
+
       - name: Test with PySys
         working-directory: test
         shell: bash
         id: pysys
         run: |
-          python -m pysys run -XcodeCoverage -vdebug --outdir=${{matrix.test-run-id}}
+          python -m pysys run --ci --outdir=${{matrix.test-run-id}}
         
       # If any tests fail, PySys will return an error code, so we need "if: always()" so the following steps will run
-
-      - name: Temp Upload code coverage (Python)
-        uses: codecov/codecov-action@v1
-        if: always()
-        with:
-          file: test/__coverage_python.${{matrix.test-run-id}}/.coverage
 
       - name: Upload code coverage (Python)
         uses: codecov/codecov-action@v1
@@ -72,7 +75,7 @@ jobs:
           name: pysys_performance_${{matrix.test-run-id}}
           path: ${{ steps.pysys.outputs.artifact_CSVPerformanceReport }}
 
-      - name: Upload test failure archives
+      - name: Upload archive artifacts for any test failures
         uses: actions/upload-artifact@v2
         if: always() && steps.pysys.outputs.artifact_TestOutputArchiveDir
 

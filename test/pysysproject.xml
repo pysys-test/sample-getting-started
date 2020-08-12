@@ -3,26 +3,23 @@
 	<requires-pysys>1.6.0</requires-pysys>
 	<requires-python>3.5</requires-python>
 	
-	<!-- Pre-defined properties include: ${testRootDir}, ${outDirName}, ${os}, ${osfamily}, ${startDate}, ${startTime}, ${hostname} -->
+	<!-- Pre-defined properties include: ${testRootDir}, ${outDirName}, ${os}, ${osfamily}, ${startDate}, ${startTime}, ${hostname}. -->
 	
-	<!-- Property identifying the home directory of the application build being tested -->
-	<property name="appHome" value="${env.PYSYS_APP_HOME}" default="${testRootDir}/../bin" pathMustExist="true"/>
+	<!-- Property identifying the home directory of the application build being tested. -->
+	<property name="appHome" value="${env.PYSYS_APP_HOME}" default="${testRootDir}/.." pathMustExist="true"/>
 
 	<!-- User-defined properties (use lowerCamelCase for property names) -->
-
+	
 	<!-- Custom test framework plugins -->
 	<pythonpath value="./pysys-extensions" />
 	<test-plugin classname="myorg.myservertestplugin.MyServerTestPlugin" alias="myserver"/>
-
+	
 	<writers>
 		<writer classname="pysys.writer.testoutput.TestOutputArchiveWriter">
 			<property name="destDir" value="__pysys_output_archives/"/>
 			<property name="maxTotalSizeMB" value="1024.0"/>
 		</writer>
 		
-		<writer classname="pysys.writer.ci.GitHubActionsCIWriter"></writer>
-		<writer classname="pysys.writer.ci.TravisCIWriter"></writer>
-
 		<writer classname="pysys.writer.outcomes.JUnitXMLResultsWriter">
 			<property name="outputDir" value="__pysys_junit_xml"/>
 		</writer>
@@ -33,8 +30,10 @@
 			<property name="pythonCoverageArgs" value="--rcfile=${testRootDir}/pysys-extensions/python.coveragerc"/>
 		</writer>
 		
-		<writer classname="pysys.writer.console.ConsoleSummaryResultsWriter">
-		</writer>
+		<writer classname="pysys.writer.ci.GitHubActionsCIWriter"></writer>
+		<writer classname="pysys.writer.ci.TravisCIWriter"></writer>
+		
+		<writer classname="pysys.writer.console.ConsoleSummaryResultsWriter"></writer>
 	</writers>
 
 	<default-file-encodings>
