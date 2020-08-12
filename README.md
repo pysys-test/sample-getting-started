@@ -8,7 +8,8 @@ Explore the tests in this project to get an idea for what is possible with PySys
 with your own project.
 
 PySys sample projects are not shipped with the same license as PySys itself; instead the samples are released into the 
-public domain (as described in the LICENSE file) to simplify copying and freely reusing in your own projects. 
+public domain (as described in the LICENSE file) to simplify copying and freely reusing in your own projects, whatever 
+license they may use. 
 
 # Running the tests
 
