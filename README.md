@@ -1,9 +1,11 @@
 # PySys Sample - Getting Started
-[![PySys tests](../../workflows/PySys%20tests/badge.svg)](../../actions)
+[![PySys tests](../../workflows/PySys/badge.svg)](../../actions)
+[![codecov](https://codecov.io/gh/pysys-test/sample-getting-started/branch/main/graph/badge.svg)](https://codecov.io/gh/pysys-test/sample-getting-started)
 
 This project shows how to use the PySys system test framework to test a sample application (a small REST/HTTP server). 
 
-Explore the tests in this project to get an idea for what is possible with PySys, or fork this repo to get started with your own project.
+Explore the tests in this project to get an idea for what is possible with PySys, or fork this repo to get started 
+with your own project.
 
 # Running the tests
 
