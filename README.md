@@ -22,13 +22,13 @@ If you want to re-run just the validation part of a test (which is a big time-sa
 
 	pysys.py run --validateOnly 001
 
-PySys makes it easy to reproduce race conditions in your application (or test) by cycling a test many times, and for  
-speeding up test execution by running multiple test jobs/threads concurrently:
+PySys makes it easy to reproduce race conditions in your application by cycling a failing testcase many times, and to  
+run multiple test jobs concurrently for faster execution:
 
 	pysys.py run --cycle 20 -j5 001
 
 PySys includes support for GitHub actions, and you can see the results of executing this test project in the 
-[Actions](../actions) tab for this repo. 
+[Actions](../../actions) tab for this repo. 
 
 # Exploring what the tests do
 
