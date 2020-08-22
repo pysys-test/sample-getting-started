@@ -90,5 +90,5 @@ class MyServerTestPlugin(object):
 		Raises an error if the process is not running or if the port of this server is not known. 
 		"""
 		if not server.running(): return
-		urllib.request.urlopen(f'http://localhost:{server.info["port"]}/shutdown').close()
+		urllib.request.urlopen(f'http://127.0.0.1:{server.info["port"]}/shutdown').close()
 		server.wait(timeout, **kwargs)

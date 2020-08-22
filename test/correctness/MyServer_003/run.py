@@ -15,7 +15,7 @@ class PySysTest(pysys.basetest.BaseTest):
 			}[compressionType]
 		
 		self.startPython([self.input+'/httpget.py', 
-			f'http://localhost:{server.info["port"]}/sensorValues', compressionType, auth], stdouterr='sensorValues')
+			f'http://127.0.0.1:{server.info["port"]}/sensorValues', compressionType, auth], stdouterr='sensorValues')
 
 	def validate(self):	
 		self.logFileContents('sensorValues.out', maxLines=0) 

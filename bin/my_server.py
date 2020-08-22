@@ -39,9 +39,10 @@ try:
 
 	class MyHandler(http.server.SimpleHTTPRequestHandler):
 		def log_message(self, format, *args):
-			log.info(format, *args)		
+			log.info(format, *args)
 
 		def do_GET(self):
+			t = time.time()
 			if self.path == '/shutdown':
 				log.info('Clean shutdown requested')
 				self.send_response(200)
@@ -80,7 +81,7 @@ try:
 			else:
 				super().do_GET()
 
-	httpd = socketserver.TCPServer(("", args.port), MyHandler)
+	httpd = socketserver.TCPServer(("127.0.0.1", args.port), MyHandler)
 
 	log.debug('Initializing server with args: %s', sys.argv[1:])
 	log.info("Started MyServer v%s on port %d", __version__, args.port)

@@ -35,12 +35,12 @@ class PySysTest(pysys.basetest.BaseTest):
 		self.log.info('')
 		
 		# Run a test tool (in this case, written in Python) from this test's Input/ directory.
-		self.startPython([self.input+'/httpget.py', f'http://localhost:{serverPort}/data/myfile.json'], 
+		self.startPython([self.input+'/httpget.py', f'http://127.0.0.1:{serverPort}/data/myfile.json'], 
 			stdouterr='httpget_myfile')
 		
 		# By default PySys checks that processes return a 0 (success) exit code, so the test will abort with 
 		# an error if not, unless we set expectedExitStatus
-		self.startPython([self.input+'/httpget.py', f'http://localhost:{serverPort}/non-existent-path'], 
+		self.startPython([self.input+'/httpget.py', f'http://127.0.0.1:{serverPort}/non-existent-path'], 
 			stdouterr='httpget_nonexistent', expectedExitStatus='!= 0')
 	
 	def validate(self):

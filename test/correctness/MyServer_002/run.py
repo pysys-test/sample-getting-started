@@ -31,7 +31,7 @@ class PySysTest(pysys.basetest.BaseTest):
 		# Although all processes are automatically killed by PySys during cleanup, it's sometimes beneficial to perform 
 		# a clean shutdown first, for example many code coverage tools only generate output during a graceful shutdown
 		self.addCleanupFunction(lambda: [
-			self.startPython([self.input+'/httpget.py', f'http://localhost:{server1.info["port"]}/shutdown'], 
+			self.startPython([self.input+'/httpget.py', f'http://127.0.0.1:{server1.info["port"]}/shutdown'], 
 				stdouterr=self.allocateUniqueStdOutErr('my_server1_shudown'), displayName='my_server1 clean shutdown', ignoreExitStatus=True), 
 			server1.wait(TIMEOUTS['WaitForProcessStop'])] if server1.running() else None)
 		
@@ -55,9 +55,9 @@ class PySysTest(pysys.basetest.BaseTest):
 		# in the background at the same time rather than one by one. We use allocateUniqueStdOutErr() rather than 
 		# explicitly specifying the stdout/err files because we don't plan to examine the output during validation, but 
 		# want it all to be in the output dir in case of failures. 
-		self.startPython([self.input+'/httpget.py', f'http://localhost:{server1.info["port"]}/data/myfile.json'], 
+		self.startPython([self.input+'/httpget.py', f'http://127.0.0.1:{server1.info["port"]}/data/myfile.json'], 
 			stdouterr=self.allocateUniqueStdOutErr('httpget'), background=True)
-		self.startPython([self.input+'/httpget.py', f'http://localhost:{server2.info["port"]}/data/myfile.json'], 
+		self.startPython([self.input+'/httpget.py', f'http://127.0.0.1:{server2.info["port"]}/data/myfile.json'], 
 			stdouterr=self.allocateUniqueStdOutErr('httpget'), background=True)
 
 		self.log.info('')
