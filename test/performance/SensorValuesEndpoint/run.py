@@ -32,12 +32,14 @@ class PySysTest(pysys.basetest.BaseTest):
 		
 		self.logFileContents('http_perf_client.out', includes=['Completed .+response iterations.+'])
 		
-		# Use getExprFromFile to extract the data we need to calculate the throughput rate with a regular expression.
+		# Use getExprFromFile to extract the data we need to calculate the throughput rate, with a regular expression.
 		actualIterations, timeSecs = self.getExprFromFile('http_perf_client.out', 
 			'Completed (.*) response iterations in (.*) seconds', groups=[1, 2])
 		
-		# It's best to report a "rate" rather than the total time, so that we can tweak the iteration count later if 
-		# we want to get more stable numbers. 
+		# Now we call reportPerformanceResult to report the main performance numbers in a CSV file, for later analysis 
+		# and comparison between versions. 
+		# It's best to report "rates" rather than the total time taken, so that we can tweak the iteration count later 
+		# if needed to get more stable numbers. 
 		self.reportPerformanceResult(int(actualIterations.replace(',',''))/float(timeSecs), 
 			# Each performance result is identified by a short string that uniquely identifies it. Make sure this 
 			#   includes information about what mode it's running in and what this test does so that there's no need to 
