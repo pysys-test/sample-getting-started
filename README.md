@@ -60,7 +60,7 @@ executed, but to run all the available modes, just use --mode=ALL:
 
 	pysys.py run 003 --mode=ALL
 
-There is also a performance test, and just to show that numbers aren't essential, this is given a name 
+There is also a performance test, and just to show that numbers aren't essential in test ids, this is given a name 
 ("SensorValuesEndpoint") rather than a number. It has a class variable called "iterations" which controls how long the 
 test runs for. If you wanted to run the test for a larger number of iterations to try to get a more stable performance 
 result this is easy to do using the -X argument:
