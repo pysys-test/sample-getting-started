@@ -48,7 +48,7 @@ class PySysTest(pysys.basetest.BaseTest):
 		# If you need to start the same process from multiple tests it may be worth factoring it out into a test plugin
 		# In this case, we created a MyServerTestPlugin class and gave it the alias "myserver" so we can use a single 
 		# line to allocate a port which saves re-tying the above logic every time
-		server2 = self.myserver.startServer(name="server2")
+		server2 = self.myserver.startServer(name="my_server2")
 		
 		# Now we want to run some processes to check the server is behaving correctly. We could run these in the 
 		# foreground, but since there are several, and since we don't care about ordering, it's quicker to run them 
@@ -79,7 +79,10 @@ class PySysTest(pysys.basetest.BaseTest):
 		self.assertThat('server.running()', server=server2)
 		
 	def validate(self):	
-		self.assertThatGrep('my_server_invalid_port.out', ' ERROR: (.*)', "value == expected", 
+		self.assertGrep('my_server1.out', r' (ERROR|FATAL|WARN) .*', contains=False)
+		self.assertGrep('my_server2.out', r' (ERROR|FATAL|WARN) .*', contains=False)
+
+		self.assertThatGrep('my_server_invalid_port.out', r' ERROR +(.*)', "value == expected", 
 			expected="Server failed: Invalid port number specified: -1")
-		self.assertThatGrep('my_server_invalid_loglevel.out', ' ERROR: (.*)', "'FOOBAR' in value")
+		self.assertThatGrep('my_server_invalid_loglevel.out', r' ERROR +(.*)', "'FOOBAR' in value")
 	

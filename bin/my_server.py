@@ -15,7 +15,7 @@ import gzip
 
 __version__ = '1.0.0'
 
-logging.basicConfig(format='%(asctime)-15s %(levelname)6s: %(message)s', stream=sys.stdout)
+logging.basicConfig(format='%(asctime)-15s %(levelname)6s %(message)s', stream=sys.stdout)
 log = logging.getLogger()
 
 os.chdir(os.path.dirname(__file__))

@@ -3,7 +3,7 @@ from pysys.constants import *
 
 class PySysTest(pysys.basetest.BaseTest):
 	def execute(self):
-		server = self.myserver.startServer(name="myserver")
+		server = self.myserver.startServer(name="my_server")
 		
 		# This test can be run in multiple modes. The self.mode string indicates which one we're executing. 
 		# In this case we have multiple dimensions to the mode so we need to unpack them. This could also be done in 
@@ -25,8 +25,7 @@ class PySysTest(pysys.basetest.BaseTest):
 
 		# assertGrep is good for checking errors aren't present, or positively for checking that an expression is 
 		# present but you don't care where.
-		self.assertGrep('sensorValues.out', r'.*(ERROR|Exception).*', contains=False)
-		
+		self.assertGrep('my_server.out', r' (ERROR|FATAL|WARN) .*', contains=False)
 		self.assertGrep('sensorValues.out', r'"timestamp": ".+"') # contains some timestamp, don't care what or where
 
 		# Advanced: regular expression escaping can be tricky. Backslashes can be handled with r'...' strings, but 

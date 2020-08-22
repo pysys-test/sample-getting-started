@@ -51,7 +51,7 @@ class PySysTest(pysys.basetest.BaseTest):
 		self.logFileContents('my_server.out')
 		
 		# It's good practice to check for unexpected errors and warnings so they don't go unnoticed
-		self.assertGrep('my_server.out', ' (ERROR|FATAL|WARN) .*', contains=False)
+		self.assertGrep('my_server.out', r' (ERROR|FATAL|WARN) .*', contains=False)
 		
 		self.assertThat('message == expected', 
 			message=pysys.utils.fileutils.loadJSON(self.output+'/httpget_myfile.out')['message'], 
