@@ -59,9 +59,9 @@ class MyServerTestPlugin(object):
 		if '--port' not in arguments and '--configfile' not in arguments:
 			serverPort = self.owner.getNextAvailableTCPPort()
 			arguments = arguments+['--port', str(serverPort)]
-			kwargs.setdefault('displayName', f'{name}<port {serverPort}>')
 		else:
 			serverPort = None
+		kwargs.setdefault('displayName', f'{name}<port {serverPort or "?"}>')
 		
 		# Could optionally call addCleanupFunction to send a graceful shutdown request to the server port, rather than 
 		# relying on hard kill PySys does by default during cleanup
