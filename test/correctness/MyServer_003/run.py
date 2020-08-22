@@ -4,7 +4,18 @@ from pysys.constants import *
 class PySysTest(pysys.basetest.BaseTest):
 	def execute(self):
 		server = self.myserver.startServer(name="myserver")
-		self.startPython([self.input+'/httpget.py', f'http://localhost:{server.info["port"]}/sensorValues'], stdouterr='sensorValues')
+		
+		# This test can be run in multiple modes. The self.mode string indicates which one we're executing. 
+		# In this case we have multiple dimensions to the mode so we need to unpack them. This could also be done in 
+		# a test plugin class if these modes were used by multiple tests. 
+		compressionType, auth = self.mode.split('_')
+		compressionType = {
+			'CompressionGZip': 'gzip', 
+			'CompressionNone': '',
+			}[compressionType]
+		
+		self.startPython([self.input+'/httpget.py', 
+			f'http://localhost:{server.info["port"]}/sensorValues', compressionType, auth], stdouterr='sensorValues')
 
 	def validate(self):	
 		self.logFileContents('sensorValues.out', maxLines=0) 

@@ -2,7 +2,7 @@
 <pysystest>
   
   <description> 
-    <title>MyServer startup: cmd line arg handling (+ demo of PySys process starting, and use of a test plugin)</title>    
+    <title>MyServer startup: arg parsing (+ demo of PySys process starting, and use of a test plugin)</title>    
     <purpose><![CDATA[
 		To demonstrate successful and unsuccessful startup of MyServer. 
 		

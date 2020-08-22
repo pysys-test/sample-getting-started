@@ -11,6 +11,7 @@ import logging
 import threading
 import datetime
 import socket
+import gzip
 
 __version__ = '1.0.0'
 
@@ -53,9 +54,7 @@ try:
 
 			elif self.path == '/sensorValues':
 				# dynamically generate some data
-				self.send_response(200)
-				self.end_headers()
-				self.wfile.write(json.dumps({
+				body = json.dumps({
 					'sensorId':'ABC1234',
 					'timestamp':'%s.%03d'%(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), datetime.datetime.now().microsecond/1000),
 					'collectionHost':socket.gethostname(),
@@ -68,7 +67,16 @@ try:
 					], 
 					'measurementTimeSpanSecs': 2.5,
 					'dataPaths':r'c:\devicedata*\sensor.json',
-				}).encode('utf-8'))
+				}).encode('utf-8')
+				
+				self.send_response(200)
+				if self.headers.get('Accept-encoding', None) == 'gzip':
+					body = gzip.compress(body)
+					self.send_header("Content-length", str(len(body)))
+					self.send_header("Content-Encoding", "gzip")
+				
+				self.end_headers()
+				self.wfile.write(body)
 			else:
 				super().do_GET()
 

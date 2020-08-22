@@ -52,8 +52,9 @@ class PySysTest(pysys.basetest.BaseTest):
 		
 		# Now we want to run some processes to check the server is behaving correctly. We could run these in the 
 		# foreground, but since there are several, and since we don't care about ordering, it's quicker to run them 
-		# in the background at the same time rather than one by one. We use allocateUniqueStdOutErr() because we 
-		# don't plan to examine the output during validation, but want it to be in the output dir in case of failures. 
+		# in the background at the same time rather than one by one. We use allocateUniqueStdOutErr() rather than 
+		# explicitly specifying the stdout/err files because we don't plan to examine the output during validation, but 
+		# want it all to be in the output dir in case of failures. 
 		self.startPython([self.input+'/httpget.py', f'http://localhost:{server1.info["port"]}/data/myfile.json'], 
 			stdouterr=self.allocateUniqueStdOutErr('httpget'), background=True)
 		self.startPython([self.input+'/httpget.py', f'http://localhost:{server2.info["port"]}/data/myfile.json'], 
