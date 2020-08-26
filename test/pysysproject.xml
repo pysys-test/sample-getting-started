@@ -12,7 +12,8 @@
 	
 	<!-- Custom test framework plugins -->
 	<pythonpath value="./pysys-extensions" />
-	<test-plugin classname="myorg.myservertestplugin.MyServerTestPlugin" alias="myserver"/>
+	<test-plugin classname="myorg.mytestplugin.MyServerTestPlugin" alias="myserver"/>
+	<runner-plugin classname="myorg.myrunnerplugin.MyServerRunnerPlugin"/>
 	
 	<writers>
 		<writer classname="pysys.writer.testoutput.TestOutputArchiveWriter">

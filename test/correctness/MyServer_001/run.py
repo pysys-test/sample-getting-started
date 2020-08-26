@@ -3,23 +3,22 @@ from pysys.constants import *
 
 class PySysTest(pysys.basetest.BaseTest):
 	""" This is a system test for a server process called MyServer. It checks that the server can be started and 
-		respond to basic requests. """
+	respond to basic HTTP requests. """
 	
 	def execute(self):
-	
-		# Ask PySys to pick a free TCP port to start the server on (this allows running many tests in 
-		# parallel without clashes)
+		# Ask PySys to pick a free TCP port to start the server on (this allows running tests in 
+		# parallel without clashes).
 		serverPort = self.getNextAvailableTCPPort()
 		
 		# A common system testing task is pre-processing a file, for example to substitute in required 
-		# testing parameters
+		# testing parameters.
 		self.copy(self.input+'/myserverconfig.json', self.output+'/', mappers=[
 			lambda line: line.replace('@SERVER_PORT@', str(serverPort)),
 		])
 		
 		# Start the server application we're testing (as a background process)
 		# self.project provides access to properties in pysysproject.xml, such as appHome which is the 
-		# location of the application we're testing
+		# location of the application we're testing.
 		server = self.startProcess(
 			command   = self.project.appHome+'/my_server.%s'%('bat' if IS_WINDOWS else 'sh'), 
 			arguments = ['--configfile', self.output+'/myserverconfig.json', ], 
@@ -28,7 +27,7 @@ class PySysTest(pysys.basetest.BaseTest):
 			)
 		
 		# Wait for the server to start by polling for a grep regular expression. The errorExpr/process 
-		# arguments ensure we abort with a really informative message if the server fails to start
+		# arguments ensure we abort with a really informative message if the server fails to start.
 		self.waitForGrep('my_server.out', 'Started MyServer .*on port .*', errorExpr=[' (ERROR|FATAL) '], process=server) 
 		
 		# Logging a blank line every now and again can make the test output easier to read
@@ -39,7 +38,7 @@ class PySysTest(pysys.basetest.BaseTest):
 			stdouterr='httpget_myfile')
 		
 		# By default PySys checks that processes return a 0 (success) exit code, so the test will abort with 
-		# an error if not, unless we set expectedExitStatus
+		# an error if not, unless we set expectedExitStatus to indicate we're expecting some kind of failure.
 		self.startPython([self.input+'/httpget.py', f'http://127.0.0.1:{serverPort}/non-existent-path'], 
 			stdouterr='httpget_nonexistent', expectedExitStatus='!= 0')
 	
@@ -56,6 +55,6 @@ class PySysTest(pysys.basetest.BaseTest):
 		self.assertThat('message == expected', 
 			message=pysys.utils.fileutils.loadJSON(self.output+'/httpget_myfile.out')['message'], 
 			expected="Hello world!", 
-			# extra arguments can be used to give a more informative message if there's a failure:
+			# Extra arguments can be used to give a more informative message if there's a failure:
 			url='/data/myfile.json', 
 			)
