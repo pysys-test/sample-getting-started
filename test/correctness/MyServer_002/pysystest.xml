@@ -15,7 +15,7 @@
   
   <classification>
     <groups inherit="true">
-      <group></group>
+      <group>myServerStartup</group>
     </groups>
     
     <modes inherit="true">

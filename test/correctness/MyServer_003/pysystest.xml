@@ -14,7 +14,7 @@
   
   <classification>
     <groups inherit="true">
-      <group></group>
+      <group>myServerSensorValues</group>
     </groups>
     
     <modes inherit="true">
