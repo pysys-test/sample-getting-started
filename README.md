@@ -7,6 +7,8 @@ This project shows how to use the PySys system test framework to test a sample a
 Explore the tests in this project to get an idea for what is possible with PySys, or fork this repo to get started 
 with your own project.
 
+# License
+
 PySys sample projects are not shipped with the same license as PySys itself; instead the samples are released into the 
 public domain (as described in the LICENSE file) to simplify copying and freely reusing in your own projects, whatever 
 license they may use. 

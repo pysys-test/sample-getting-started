@@ -40,6 +40,16 @@ class MyServerTestPlugin(object):
 			}), encoding='utf-8')
 		return os.path.join(self.owner.output, configfile)
 
+	# A common pattern is to create a helper method that you always call from your `BaseTest.validate()`
+	# That approach allows you to later customize the logic by changing just one single place, and also to omit 
+	# it for specific tests where it is not wanted. 
+	def checkLog(self, logfile='my_server.out', ignores=[]):
+		"""
+		Asserts that the specified log file does not contain any errors. 
+		"""
+		self.owner.assertGrep(logfile, ' (ERROR|FATAL) .*', contains=False, 
+			ignores=ignores or ['ERROR .*Expected error'])
+	
 	def startServer(self, name="my_server", arguments=[], waitForServerUp=True, **kwargs):
 		"""
 		Start this server as a background process on a dynamically assigned free port, and wait for it to come up. 

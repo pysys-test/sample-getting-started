@@ -25,10 +25,17 @@ class PySysTest(pysys.basetest.BaseTest):
 			environs  = self.createEnvirons(addToExePath=os.path.dirname(PYTHON_EXE)),
 			stdouterr = 'my_server', displayName = 'my_server<port %s>'%serverPort, background = True,
 			)
+		# PySys automatically kills the .bat script during cleanup, but we need to do this to kill the process tree 
+		# including the Python subprocess (this step will become unnecessary in the next PySys release).
+		if IS_WINDOWS: self.addCleanupFunction(lambda: self.startProcess('taskkill', ['/PID', str(server.pid), '/T', '/F'], stdouterr='taskkill'))
 		
 		# Wait for the server to start by polling for a grep regular expression. The errorExpr/process 
 		# arguments ensure we abort with a really informative message if the server fails to start.
-		self.waitForGrep('my_server.out', 'Started MyServer .*on port .*', errorExpr=[' (ERROR|FATAL) '], process=server) 
+		try:
+			self.waitForGrep('my_server.out', 'Started MyServer .*on port .*', errorExpr=[' (ERROR|FATAL) '], process=server) 
+		finally:
+			self.logFileContents('my_server.out')
+			self.logFileContents('my_server.err')
 		
 		# Logging a blank line every now and again can make the test output easier to read
 		self.log.info('')

@@ -82,6 +82,11 @@ class PySysTest(pysys.basetest.BaseTest):
 		self.assertGrep('my_server1.out', r' (ERROR|FATAL|WARN) .*', contains=False)
 		self.assertGrep('my_server2.out', r' (ERROR|FATAL|WARN) .*', contains=False)
 
+		# It's often a good idea to factor out the above checking into a method on your test plugin, so there's only 
+		# one place to change if you need to change the expressions you're checking for and/or ignoring, e.g.:
+		self.myserver.checkLog('my_server1.out')
+		self.myserver.checkLog('my_server2.out')
+
 		self.assertThatGrep('my_server_invalid_port.out', r' ERROR +(.*)', "value == expected", 
 			expected="Server failed: Invalid port number specified: -1")
 		self.assertThatGrep('my_server_invalid_loglevel.out', r' ERROR +(.*)', "'FOOBAR' in value")
