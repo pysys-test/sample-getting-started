@@ -1,4 +1,4 @@
-# This is a .coveragerc configuration file for Coverage.py
+# This is a .coveragerc configuration file for the Coverage.py Python code coverage library
 
 [run]
 # Include just the application we're testing, not any test tools
