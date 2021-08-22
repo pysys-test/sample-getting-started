@@ -1,3 +1,18 @@
+__pysys_title__   = r""" MyServer startup - arg parsing main cases (+ demo of PySys process starting, and use of a test plugin) """
+#                        ===============================================================================
+
+__pysys_purpose__ = r""" To demonstrate successful and unsuccessful startup of MyServer. 
+	
+	This also shows some of the different approaches to starting processes from PySys, including use of a test 
+	plugin to allow the logic for starting the server to be reused across multiple tests.
+	"""
+
+__pysys_authors__ = "pysysuser"
+__pysys_created__ = "1999-12-31"
+
+__pysys_groups__  = "myServerStartup; inherit=true"
+#__pysys_skipped_reason__   = "Skipped until Bug-1234 is fixed"
+
 import pysys
 from pysys.constants import *
 
@@ -6,7 +21,7 @@ class PySysTest(pysys.basetest.BaseTest):
 		port = self.getNextAvailableTCPPort()
 		server1 = self.startProcess(
 			command=self.project.appHome+'/my_server.%s'%('bat' if IS_WINDOWS else 'sh'), 
-			arguments=['--port', str(port), ], 
+			arguments=['--port', port, ], 
 			
 			# By default startProcess() uses a clean environment with a minimal set of env vars. If you need to 
 			# override or add additional env vars, use the environs= keyword and the createEnvirons helper method
