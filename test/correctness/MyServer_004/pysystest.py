@@ -6,7 +6,6 @@ __pysys_purpose__ = r""" To demonstrate error messages for unsuccessful startup 
 	This also shows how modes can be used to cover different test scenarios from the same PySysTest class. 
 	"""
 
-__pysys_authors__ = "pysysuser"
 __pysys_created__ = "1999-12-31"
 
 __pysys_groups__  = "myServerStartup"
@@ -28,10 +27,11 @@ __pysys_parameterized_test_modes__  = {
 		'expectedMessage':'Server failed: Cannot specify port twice'}, 
 	}
 
-import pysys
+import pysys.basetest, pysys.mappers
 from pysys.constants import *
 
 class PySysTest(pysys.basetest.BaseTest):
+
 	def execute(self):
 		server = self.startProcess(
 			command=self.project.appHome+'/my_server.%s'%('bat' if IS_WINDOWS else 'sh'), 

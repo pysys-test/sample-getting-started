@@ -1,22 +1,22 @@
-__pysys_title__   = r""" MyServer startup - arg parsing main cases (+ demo of PySys process starting, and use of a test plugin) """
+__pysys_title__   = r""" MyServer startup - arg parsing main cases (+ demo of PySys process starting, and use of a test helper extension class) """
 #                        ===============================================================================
 
 __pysys_purpose__ = r""" To demonstrate successful and unsuccessful startup of MyServer. 
 	
 	This also shows some of the different approaches to starting processes from PySys, including use of a test 
-	plugin to allow the logic for starting the server to be reused across multiple tests.
+	helper to allow the logic for starting the server to be reused across multiple tests.
 	"""
 
-__pysys_authors__ = "pysysuser"
 __pysys_created__ = "1999-12-31"
 
 __pysys_groups__  = "myServerStartup"
 #__pysys_skipped_reason__   = "Skipped until Bug-1234 is fixed"
 
-import pysys
+import pysys.basetest, pysys.mappers
 from pysys.constants import *
+from myorg.myserverhelper import MyServerHelper
 
-class PySysTest(pysys.basetest.BaseTest):
+class PySysTest(MyServerHelper, pysys.basetest.BaseTest):
 	def execute(self):
 		port = self.getNextAvailableTCPPort()
 		server1 = self.startProcess(
@@ -102,7 +102,10 @@ class PySysTest(pysys.basetest.BaseTest):
 		self.myserver.checkLog('my_server1.out')
 		self.myserver.checkLog('my_server2.out')
 
+		# Extract some text from the log files and validate that it matches our expectations
 		self.assertThatGrep('my_server_invalid_port.out', r' ERROR +(.*)', "value == expected", 
 			expected="Server failed: Invalid port number specified: -1")
 		self.assertThatGrep('my_server_invalid_loglevel.out', r' ERROR +(.*)', "'FOOBAR' in value")
-	
+		
+		self.assertGrepOfGrep('my_server1.out', r'Started MyServer v(.*) on port', r'[0-9]+\.[0-9]+\.[0-9]+')
+		

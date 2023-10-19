@@ -6,7 +6,6 @@ __pysys_purpose__ = r""" To measure the throughout and a sample of the latencies
 	This also shows how to report performance statistics from a PySys test for throughput and latency.
 	"""
 
-__pysys_authors__ = "pysysuser"
 __pysys_created__ = "1999-12-31"
 
 __pysys_modes__   = lambda helper: helper.createModeCombinations(
@@ -15,10 +14,11 @@ __pysys_modes__   = lambda helper: helper.createModeCombinations(
 		[ {'serverThreads': t} for t in range(1, 3) ],
 	)
 
-import pysys
+import pysys.basetest, pysys.mappers
 from pysys.constants import *
+from myorg.myserverhelper import MyServerHelper
 
-class PySysTest(pysys.basetest.BaseTest):
+class PySysTest(MyServerHelper, pysys.basetest.BaseTest):
 
 	# Class variables defined here can be overridden on the command line if desired, e.g. pysys.py run -Xiterations=500
 	

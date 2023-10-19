@@ -1,28 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <pysysproject>
-	<requires-pysys>2.1</requires-pysys>
-	<requires-python>3.6</requires-python>
+	<requires-pysys>2.2</requires-pysys>
+	<requires-python>3.8</requires-python>
 	
 	<!-- Pre-defined properties include: ${testRootDir}, ${outDirName}, ${os}, ${osfamily}, ${startDate}, ${startTime}, ${hostname}. -->
 	
 	<!-- Property identifying the home directory of the application build being tested. -->
-	<property name="appHome" value="${env.PYSYS_APP_HOME}" default="${testRootDir}/../bin" pathMustExist="true"/>
+	<property name="appHome" path="${env.PYSYS_APP_HOME}" default="${testRootDir}/../bin" pathMustExist="true"/>
 
 	<!-- User-defined properties (use lowerCamelCase for property names) -->
 	
 	<!-- Custom test framework plugins -->
 	<pythonpath value="./pysys-extensions" />
-	<test-plugin classname="myorg.mytestplugin.MyServerTestPlugin" alias="myserver"/>
 	<runner-plugin classname="myorg.myrunnerplugin.MyServerRunnerPlugin"/>
 	
 	<writers>
 		<writer classname="pysys.writer.testoutput.TestOutputArchiveWriter">
 			<property name="destDir" value="__pysys_output_archives/"/>
 			<property name="maxTotalSizeMB" value="1024.0"/>
+			<property name="format" value="tar.gz"/>
 		</writer>
 		
 		<writer classname="pysys.writer.outcomes.JUnitXMLResultsWriter">
 			<property name="outputDir" value="__pysys_junit_xml"/>
+			<property name="testsuiteName" value="@TESTID_PACKAGE@"/>
+			<property name="testcaseName" value="@TESTID_NO_PACKAGE_OR_MODE@~@MODE@"/>
+			<property name="testcaseClassname" value=""/>
 		</writer>
 		
 		<!-- Code coverage for .py files -->
